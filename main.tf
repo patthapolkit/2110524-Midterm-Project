@@ -299,12 +299,6 @@ resource "aws_s3_bucket_public_access_block" "wordpress_media_public_access" {
   restrict_public_buckets = false
 }
 
-resource "aws_s3_bucket_acl" "wordpress_media_acl" {
-  depends_on = [aws_s3_bucket_ownership_controls.wordpress_media_ownership]
-  bucket     = aws_s3_bucket.wordpress_media.id
-  acl        = "public-read"
-}
-
 resource "aws_s3_bucket_policy" "wordpress_media_policy" {
   bucket = aws_s3_bucket.wordpress_media.id
   policy = jsonencode({
@@ -339,7 +333,7 @@ resource "aws_iam_user_policy" "wordpress_s3_policy" {
   name = "wordpress-s3-policy"
   user = aws_iam_user.wordpress_s3_user.name
   policy = jsonencode({
-    Version = "2012-10-17",
+    Version = "2012-10-17"
     Statement = [
       {
         Action = "s3:*",
