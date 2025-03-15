@@ -409,9 +409,9 @@ resource "aws_instance" "mariadb" {
   }
 
   user_data = templatefile("${path.module}/mariadb_setup.sh", {
-    db_name     = var.database_name
-    db_user     = var.database_user
-    db_password = var.database_pass
+    db_name = var.database_name
+    db_user = var.database_user
+    db_pass = var.database_pass
   })
 
   tags = {
