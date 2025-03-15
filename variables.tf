@@ -31,6 +31,7 @@ variable "database_user" {
 variable "database_pass" {
   description = "WordPress database password"
   type        = string
+  sensitive   = true
 }
 
 variable "admin_user" {
@@ -41,6 +42,7 @@ variable "admin_user" {
 variable "admin_pass" {
   description = "WordPress admin password"
   type        = string
+  sensitive   = true
 }
 
 variable "instance_type" {

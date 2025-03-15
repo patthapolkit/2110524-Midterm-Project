@@ -374,18 +374,17 @@ resource "aws_instance" "wordpress_app" {
     device_index         = 1
   }
 
-  #   user_data = templatefile("${path.module}/wordpress_setup.sh", {
-  #     db_host       = aws_network_interface.db_app_eni.private_ip
-  #     db_name       = var.database_name
-  #     db_user       = var.database_user
-  #     db_password   = var.database_pass
-  #     admin_user    = var.admin_user
-  #     admin_pass    = var.admin_pass
-  #     public_ip     = aws_eip.wordpress_ip.public_ip
-  #     s3_bucket     = var.bucket_name
-  #     s3_access_key = aws_iam_access_key.wordpress_s3_key.id
-  #     s3_secret_key = aws_iam_access_key.wordpress_s3_key.secret
-  #   })
+  user_data = templatefile("${path.module}/wordpress_setup.sh", {
+    db_host       = aws_network_interface.db_app_eni.private_ip
+    db_name       = var.database_name
+    db_user       = var.database_user
+    db_password   = var.database_pass
+    admin_user    = var.admin_user
+    admin_pass    = var.admin_pass
+    s3_access_key = aws_iam_access_key.wordpress_s3_key.id
+    s3_secret_key = aws_iam_access_key.wordpress_s3_key.secret
+    public_ip     = aws_eip.wordpress_ip.public_ip
+  })
 
   tags = {
     Name = "WordPress-App-Instance"
@@ -409,12 +408,11 @@ resource "aws_instance" "mariadb" {
     device_index         = 1
   }
 
-  #   user_data = templatefile("${path.module}/mariadb_setup.sh", {
-  #     db_name     = var.database_name
-  #     db_user     = var.database_user
-  #     db_password = var.database_pass
-  #     app_subnet  = aws_subnet.app_db_subnet.cidr_block
-  #   })
+  user_data = templatefile("${path.module}/mariadb_setup.sh", {
+    db_name     = var.database_name
+    db_user     = var.database_user
+    db_password = var.database_pass
+  })
 
   tags = {
     Name = "WordPress-DB-Instance"
