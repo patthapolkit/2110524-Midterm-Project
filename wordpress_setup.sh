@@ -70,6 +70,8 @@ define( 'AS3CF_SETTINGS', serialize( array(
     'secret-access-key' => '${s3_secret_key}',
     'bucket' => '${s3_bucket}',
     'region' => '${s3_region}',
+    'copy-to-s3' => true,
+    'serve-from-s3' => true,
 ) ) );
 
 if ( ! defined( 'ABSPATH' ) ) {
