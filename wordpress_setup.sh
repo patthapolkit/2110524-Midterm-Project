@@ -16,7 +16,7 @@ sudo chown -R www-data:www-data /var/www/html
 sudo chmod -R 755 /var/www/html
 
 # Configure Apache Virtual Host for WordPress
-sudo tee /etc/apache2/sites-available/wordpress.conf > /dev/null <<EOF
+sudo tee /etc/apache2/sites-available/wordpress.conf > /dev/null << EOF
 <VirtualHost *:80>
     DocumentRoot /var/www/html
     <Directory /var/www/html>
@@ -44,36 +44,36 @@ sleep 3m
 cd /var/www/html
 cat > wp-config.php << EOF
 <?php
-define('DB_NAME', '${db_name}');
-define('DB_USER', '${db_user}');
-define('DB_PASSWORD', '${db_pass}');
-define('DB_HOST', '${db_host}');
-define('DB_CHARSET', 'utf8');
-define('DB_COLLATE', '');
+define( 'DB_NAME', '${db_name}' );
+define( 'DB_USER', '${db_user}' );
+define( 'DB_PASSWORD', '${db_pass}' );
+define( 'DB_HOST', '${db_host}' );
+define( 'DB_CHARSET', 'utf8' );
+define( 'DB_COLLATE', '' );
 
-define('AUTH_KEY',         '$(openssl rand -base64 64)');
-define('SECURE_AUTH_KEY',  '$(openssl rand -base64 64)');
-define('LOGGED_IN_KEY',    '$(openssl rand -base64 64)');
-define('NONCE_KEY',        '$(openssl rand -base64 64)');
-define('AUTH_SALT',        '$(openssl rand -base64 64)');
-define('SECURE_AUTH_SALT', '$(openssl rand -base64 64)');
-define('LOGGED_IN_SALT',   '$(openssl rand -base64 64)');
-define('NONCE_SALT',       '$(openssl rand -base64 64)');
+define( 'AUTH_KEY',         '$(openssl rand -base64 64)' );
+define( 'SECURE_AUTH_KEY',  '$(openssl rand -base64 64)' );
+define( 'LOGGED_IN_KEY',    '$(openssl rand -base64 64)' );
+define( 'NONCE_KEY',        '$(openssl rand -base64 64)' );
+define( 'AUTH_SALT',        '$(openssl rand -base64 64)' );
+define( 'SECURE_AUTH_SALT', '$(openssl rand -base64 64)' );
+define( 'LOGGED_IN_SALT',   '$(openssl rand -base64 64)' );
+define( 'NONCE_SALT',       '$(openssl rand -base64 64)' );
 
 \$table_prefix = 'wp_';
 
-define('WP_DEBUG', false);
+define( 'WP_DEBUG', false );
 
-define('AS3CF_SETTINGS', serialize(array(
+define( 'AS3CF_SETTINGS', serialize( array(
     'provider' => 'aws',
     'access-key-id' => '${s3_access_key}',
     'secret-access-key' => '${s3_secret_key}',
     'bucket' => '${s3_bucket}',
     'region' => '${s3_region}',
-)));
+) ) );
 
-if ( ! defined('ABSPATH') ) {
-    define('ABSPATH', __DIR__ . '/');
+if ( ! defined( 'ABSPATH' ) ) {
+    define( 'ABSPATH', __DIR__ . '/' );
 }
 
 require_once ABSPATH . 'wp-settings.php';

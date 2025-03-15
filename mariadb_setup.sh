@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# # Update and install dependencies
-# sudo apt update && sudo apt upgrade -y
-# sudo apt install -y curl apt-transport-https
+# Update and install dependencies
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl apt-transport-https
 
 # Add MariaDB 10.11 repository
 sudo curl -LSsO https://r.mariadb.com/downloads/mariadb_repo_setup 
@@ -24,8 +24,9 @@ sudo mysql -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
 sudo mysql -e "FLUSH PRIVILEGES;"
 
 # Create WordPress database and user
-sudo mysql -u root -p"${db_pass}" <<EOF
-CREATE DATABASE \`${db_name}\`;
+sudo mysql -u root -p"${db_pass}" << EOF
+CREATE DATABASE IF NOT EXISTS \`${db_name}\`;
+DROP USER IF EXISTS '${db_user}'@'%';
 CREATE USER '${db_user}'@'%' IDENTIFIED BY '${db_pass}';
 GRANT ALL PRIVILEGES ON \`${db_name}\`.* TO '${db_user}'@'%';
 FLUSH PRIVILEGES;
