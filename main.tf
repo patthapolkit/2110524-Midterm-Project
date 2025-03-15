@@ -339,16 +339,11 @@ resource "aws_iam_user_policy" "wordpress_s3_policy" {
   name = "wordpress-s3-policy"
   user = aws_iam_user.wordpress_s3_user.name
   policy = jsonencode({
-    Version = "2012-10-17"
+    Version = "2012-10-17",
     Statement = [
       {
-        Action = [
-          "s3:PutObject",
-          "s3:GetObject",
-          "s3:DeleteObject",
-          "s3:ListBucket"
-        ]
-        Effect = "Allow"
+        Action = "s3:*",
+        Effect = "Allow",
         Resource = [
           "${aws_s3_bucket.wordpress_media.arn}",
           "${aws_s3_bucket.wordpress_media.arn}/*"
@@ -383,6 +378,8 @@ resource "aws_instance" "wordpress_app" {
     admin_pass    = var.admin_pass
     s3_access_key = aws_iam_access_key.wordpress_s3_key.id
     s3_secret_key = aws_iam_access_key.wordpress_s3_key.secret
+    s3_bucket     = aws_s3_bucket.wordpress_media.bucket
+    s3_region     = var.region
     public_ip     = aws_eip.wordpress_ip.public_ip
   })
 

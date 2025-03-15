@@ -56,6 +56,8 @@ define('AS3CF_SETTINGS', serialize(array(
     'provider' => 'aws',
     'access-key-id' => '${s3_access_key}',
     'secret-access-key' => '${s3_secret_key}',
+    'bucket' => '${s3_bucket}',
+    'region' => '${s3_region}',
 )));
 EOF
 
