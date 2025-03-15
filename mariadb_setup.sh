@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Update and install dependencies
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y curl apt-transport-https
+# # Update and install dependencies
+# sudo apt update && sudo apt upgrade -y
+# sudo apt install -y curl apt-transport-https
 
 # Add MariaDB 10.11 repository
 sudo curl -LSsO https://r.mariadb.com/downloads/mariadb_repo_setup 
