@@ -31,7 +31,6 @@ EOF
 # Enable the WordPress site and Apache rewrite module
 sudo a2ensite wordpress
 sudo a2enmod rewrite
-sudo systemctl restart apache2
 
 # Install WP-CLI
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
@@ -41,17 +40,30 @@ sudo mv wp-cli.phar /usr/local/bin/wp
 # Wait for the MariaDB server to be available
 sleep 3m
 
-# Configure WordPress Database Connection
-sudo cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
-sudo sed -i "s/database_name_here/${db_name}/" /var/www/html/wp-config.php
-sudo sed -i "s/username_here/${db_user}/" /var/www/html/wp-config.php
-sudo sed -i "s/password_here/${db_pass}/" /var/www/html/wp-config.php
-sudo sed -i "s/localhost/${db_host}/" /var/www/html/wp-config.php
+# Create wp-config.php
+cd /var/www/html
+cat > wp-config.php << EOF
+<?php
+define('DB_NAME', '${db_name}');
+define('DB_USER', '${db_user}');
+define('DB_PASSWORD', '${db_pass}');
+define('DB_HOST', '${db_host}');
+define('DB_CHARSET', 'utf8');
+define('DB_COLLATE', '');
 
-# Add AWS S3 configuration in wp-config.php
-sudo tee -a /var/www/html/wp-config.php > /dev/null <<EOF
+define('AUTH_KEY',         '$(openssl rand -base64 64)');
+define('SECURE_AUTH_KEY',  '$(openssl rand -base64 64)');
+define('LOGGED_IN_KEY',    '$(openssl rand -base64 64)');
+define('NONCE_KEY',        '$(openssl rand -base64 64)');
+define('AUTH_SALT',        '$(openssl rand -base64 64)');
+define('SECURE_AUTH_SALT', '$(openssl rand -base64 64)');
+define('LOGGED_IN_SALT',   '$(openssl rand -base64 64)');
+define('NONCE_SALT',       '$(openssl rand -base64 64)');
 
-/** AWS S3 Config for WP Offload Media */
+\$table_prefix = 'wp_';
+
+define('WP_DEBUG', false);
+
 define('AS3CF_SETTINGS', serialize(array(
     'provider' => 'aws',
     'access-key-id' => '${s3_access_key}',
@@ -59,6 +71,12 @@ define('AS3CF_SETTINGS', serialize(array(
     'bucket' => '${s3_bucket}',
     'region' => '${s3_region}',
 )));
+
+if ( ! defined('ABSPATH') ) {
+    define('ABSPATH', __DIR__ . '/');
+}
+
+require_once ABSPATH . 'wp-settings.php';
 EOF
 
 # Run WordPress Installation
@@ -67,6 +85,7 @@ sudo -u www-data wp core install --url="${public_ip}" --admin_user="${admin_user
 # Install WP Offload Media plugin
 sudo -u www-data wp plugin install amazon-s3-and-cloudfront --activate --path=/var/www/html
 
+# Restart Apache to apply changes
 sudo systemctl enable apache2
 sudo systemctl restart apache2
 

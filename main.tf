@@ -145,7 +145,6 @@ resource "aws_security_group" "app_sg" {
   description = "Security group for WordPress application instance"
   vpc_id      = aws_vpc.wordpress_vpc.id
 
-  # Allow HTTP from anywhere
   ingress {
     from_port   = 80
     to_port     = 80
@@ -154,7 +153,6 @@ resource "aws_security_group" "app_sg" {
     description = "Allow HTTP"
   }
 
-  # Allow HTTPS from anywhere
   ingress {
     from_port   = 443
     to_port     = 443
@@ -163,7 +161,6 @@ resource "aws_security_group" "app_sg" {
     description = "Allow HTTPS"
   }
 
-  # Allow SSH from anywhere (for administration)
   ingress {
     from_port   = 22
     to_port     = 22
@@ -172,7 +169,6 @@ resource "aws_security_group" "app_sg" {
     description = "Allow SSH"
   }
 
-  # Allow all outbound traffic
   egress {
     from_port   = 0
     to_port     = 0
@@ -191,7 +187,6 @@ resource "aws_security_group" "db_sg" {
   description = "Security group for MariaDB instance"
   vpc_id      = aws_vpc.wordpress_vpc.id
 
-  # Allow MySQL/MariaDB access only from the application instance's private subnet
   ingress {
     from_port   = 3306
     to_port     = 3306
@@ -200,7 +195,6 @@ resource "aws_security_group" "db_sg" {
     description = "Allow MariaDB from App-DB subnet"
   }
 
-  # Allow SSH from the App-DB subnet
   ingress {
     from_port   = 22
     to_port     = 22
@@ -209,7 +203,6 @@ resource "aws_security_group" "db_sg" {
     description = "Allow SSH from App-DB subnet"
   }
 
-  # Allow all outbound traffic
   egress {
     from_port   = 0
     to_port     = 0
@@ -348,6 +341,32 @@ resource "aws_iam_user_policy" "wordpress_s3_policy" {
 }
 
 # EC2 Instances
+resource "aws_instance" "mariadb" {
+  ami           = var.ami
+  instance_type = var.instance_type
+  key_name      = aws_key_pair.cloud_wordpress_key.key_name
+
+  network_interface {
+    network_interface_id = aws_network_interface.db_inet_eni.id
+    device_index         = 0
+  }
+
+  network_interface {
+    network_interface_id = aws_network_interface.db_app_eni.id
+    device_index         = 1
+  }
+
+  user_data = templatefile("${path.module}/mariadb_setup.sh", {
+    db_name = var.database_name
+    db_user = var.database_user
+    db_pass = var.database_pass
+  })
+
+  tags = {
+    Name = "WordPress-DB-Instance"
+  }
+}
+
 resource "aws_instance" "wordpress_app" {
   ami           = var.ami
   instance_type = var.instance_type
@@ -382,32 +401,6 @@ resource "aws_instance" "wordpress_app" {
   }
 
   depends_on = [aws_instance.mariadb]
-}
-
-resource "aws_instance" "mariadb" {
-  ami           = var.ami
-  instance_type = var.instance_type
-  key_name      = aws_key_pair.cloud_wordpress_key.key_name
-
-  network_interface {
-    network_interface_id = aws_network_interface.db_inet_eni.id
-    device_index         = 0
-  }
-
-  network_interface {
-    network_interface_id = aws_network_interface.db_app_eni.id
-    device_index         = 1
-  }
-
-  user_data = templatefile("${path.module}/mariadb_setup.sh", {
-    db_name = var.database_name
-    db_user = var.database_user
-    db_pass = var.database_pass
-  })
-
-  tags = {
-    Name = "WordPress-DB-Instance"
-  }
 }
 
 # SSH Key Pair
