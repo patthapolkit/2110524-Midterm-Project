@@ -39,7 +39,7 @@ chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
 
 # Wait for the MariaDB server to be available
-sleep 30
+sleep 3m
 
 # Configure WordPress Database Connection
 sudo cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
@@ -67,7 +67,7 @@ sudo -u www-data wp core install --url="${public_ip}" --admin_user="${admin_user
 # Install WP Offload Media plugin
 sudo -u www-data wp plugin install amazon-s3-and-cloudfront --activate --path=/var/www/html
 
-# Restart Apache
+sudo systemctl enable apache2
 sudo systemctl restart apache2
 
 echo "WordPress installation completed"
