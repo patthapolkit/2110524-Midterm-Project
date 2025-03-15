@@ -378,7 +378,7 @@ resource "aws_instance" "wordpress_app" {
     db_host       = aws_network_interface.db_app_eni.private_ip
     db_name       = var.database_name
     db_user       = var.database_user
-    db_password   = var.database_pass
+    db_pass       = var.database_pass
     admin_user    = var.admin_user
     admin_pass    = var.admin_pass
     s3_access_key = aws_iam_access_key.wordpress_s3_key.id
