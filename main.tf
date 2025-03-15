@@ -362,6 +362,8 @@ resource "aws_instance" "mariadb" {
     db_pass = var.database_pass
   })
 
+  user_data_replace_on_change = true
+
   tags = {
     Name = "WordPress-DB-Instance"
   }
@@ -395,6 +397,8 @@ resource "aws_instance" "wordpress_app" {
     s3_region     = var.region
     public_ip     = aws_eip.wordpress_ip.public_ip
   })
+
+  user_data_replace_on_change = true
 
   tags = {
     Name = "WordPress-App-Instance"

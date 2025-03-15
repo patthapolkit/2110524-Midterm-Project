@@ -5,7 +5,9 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install -y curl apt-transport-https
 
 # Add MariaDB 10.11 repository
-sudo curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version="mariadb-10.11" --os-type=ubuntu --os-version=24.04
+sudo curl -LSsO https://r.mariadb.com/downloads/mariadb_repo_setup 
+sudo chmod +x mariadb_repo_setup
+sudo ./mariadb_repo_setup --mariadb-server-version="mariadb-10.11"
 
 # Install MariaDB 10.11
 sudo apt install -y mariadb-server
