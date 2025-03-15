@@ -424,5 +424,5 @@ resource "aws_instance" "mariadb" {
 # SSH Key Pair
 resource "aws_key_pair" "cloud_wordpress_key" {
   key_name   = "cloud-wordpress-key"
-  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODaHqtrCOBpfD+meWggDG5gFEqnNDtpxnqQ7xWIfXfL cloud-wordpress"
+  public_key = var.ssh_public_key
 }
