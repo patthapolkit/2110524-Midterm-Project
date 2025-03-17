@@ -39,7 +39,7 @@ chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
 
 # Wait for the MariaDB server to be available
-sleep 1m
+sleep 30
 
 # Create wp-config.php
 cd /var/www/html
