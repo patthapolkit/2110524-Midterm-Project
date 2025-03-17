@@ -31,6 +31,7 @@ EOF
 # Enable the WordPress site and Apache rewrite module
 sudo a2ensite wordpress
 sudo a2enmod rewrite
+sudo systemctl restart apache2
 
 # Install WP-CLI
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
@@ -38,7 +39,7 @@ chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
 
 # Wait for the MariaDB server to be available
-sleep 3m
+sleep 1m
 
 # Create wp-config.php
 cd /var/www/html
