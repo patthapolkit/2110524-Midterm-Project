@@ -2,15 +2,7 @@
 
 # Update and install dependencies
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y curl apt-transport-https
-
-# Add MariaDB 10.11 repository
-sudo curl -LSsO https://r.mariadb.com/downloads/mariadb_repo_setup 
-sudo chmod +x mariadb_repo_setup
-sudo ./mariadb_repo_setup --mariadb-server-version="mariadb-10.11"
-
-# Install MariaDB 10.11
-sudo apt install -y mariadb-server
+sudo apt install -y mariadb-server=1:10.11.8-0ubuntu0.24.04.1
 
 # Start and enable MariaDB service
 sudo systemctl enable mariadb

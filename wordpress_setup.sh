@@ -2,7 +2,7 @@
 
 # Update and install dependencies
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y apache2 unzip curl wget php8.3 php8.3-cli php8.3-common php8.3-mysql php8.3-xml php8.3-gd php8.3-curl php8.3-mbstring php8.3-zip libapache2-mod-php8.3 mariadb-client
+sudo apt install -y apache2 unzip php8.3 php8.3-cli php8.3-common php8.3-mysql php8.3-xml php8.3-gd php8.3-curl php8.3-mbstring php8.3-zip libapache2-mod-php8.3 mariadb-client
 
 # Download and extract WordPress
 cd /var/www/html
